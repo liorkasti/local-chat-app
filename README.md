@@ -4,7 +4,7 @@ A react-native app
 ### Installation:
 For clone down this repository, run:
 ```
-git clone TBD
+git clone https://github.com/liorkasti/local-chat-app.git
 ```
 # React-native-socket.io-Chat
 Simple NodeJS server on socket.io + Redux + Redux-socket.io and react-native mobile application
@@ -37,7 +37,7 @@ $ npm install `or` $ yarn
 $ yarn start
 ```
 
-#### Server will listen the event on ":6868" port
+#### Server will listen the event on ":6868" port or either of your free port you like
 
 ```sh
 localhost:6868

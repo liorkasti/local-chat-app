@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const socket = useRef(null);
 
   useEffect(() => {
-    socket.current = io("http://192.168.1.18:3001");
+    socket.current = io("http://192.168.1.18:6868");
     socket.current.on("message", message => {
       setRecvMessages(prevState => GiftedChat.append(prevState, message));
     });
