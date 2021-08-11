@@ -5,7 +5,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 import LobbyScreen from "./LobbyScreen";
 
 export default function HomeScreen() {
-  const [recvMessages, setRecvMessages] = useState([]);
+  const [conversations, setRecvMessages] = useState([]);
   const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
 
@@ -17,6 +17,8 @@ export default function HomeScreen() {
   }, []);
 
   const onSend = messages => {
+    console.log('conversations: ', conversations)
+    console.log('socket.current: ', socket.current)
     socket.current.emit("message", messages[0].text);
     setRecvMessages(prevState => GiftedChat.append(prevState, messages));
   };
@@ -31,7 +33,7 @@ export default function HomeScreen() {
       {hasJoined ? (
         <GiftedChat
           renderUsernameOnMessage
-          messages={recvMessages}
+          messages={conversations}
           onSend={messages => onSend(messages)}
           user={{
             _id: 1
