@@ -2,49 +2,44 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, Platform, KeyboardAvoidingView, StatusBar } from "react-native";
 import io from "socket.io-client";
 import { GiftedChat } from "react-native-gifted-chat";
+import { useDispatch, useSelector } from "react-redux";
 import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
-import { useDispatch } from "react-redux";
-// import { Header } from "react-navigation-stack";
 
-export default function ChatRoom({ navigation }) {
-  const [conversations, setRecvMessages] = useState([]);
-  const [hasJoined, setHasJoined] = useState(false);
-  const socket = useRef(null);
+// ChatRoom.navigationOptions = props => ({
+//   title: props.navigation.getParam("name")
+// });
 
-  useEffect(() => {
-    const socket = io("http://192.168.116.2:3001"); // replace with the IP of your server, when testing on real devices
-    socket.current.on("message", message => {
-      setRecvMessages(prevState => GiftedChat.append(prevState, message));
-      console.log('conversations: ', conversations)
-    });
-  }, []);
-
-  const onSend = messages => {
-    console.log('socket.current.io: ', socket.current)
-    joinChat(messages)
-    socket.current.emit("message", messages[0].text);
-    setRecvMessages(prevState => GiftedChat.append(prevState, messages));
-  };
-
-  const joinChat = username => {
-    // console.log('socket.current: ', socket.current)
-    socket.current.emit("join", username);
-    setHasJoined(true);
-    console.log('username: ', username)
-  };
+export default function ChatRoom({ route, navigation }) {
+  
+  console.log("ChatRoom route: ", route)
+  
+  const dispatch = useDispatch();
+  const selfUser = useSelector(state => state.selfUser);
+  const conversations = useSelector(state => state.conversations);
+  const userId = route.params.userId;
+  const messages = conversations[userId].messages;
 
   return (
-    <GiftedChat
-      renderUsernameOnMessage
-      messages={conversations}
-      showAvatarForEveryMessage={true}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: 1,
-        name: "",
-        avatar: "https://placeimg.com/140/140/any`",
-    }}
-    />
+    <View style={{ flex: 1 }}>
+      <GiftedChat
+        renderUsernameOnMessage
+        messages={messages}
+        onSend={messages => {
+          dispatch({
+            type: "private_message",
+            data: { message: messages[0], conversationId: userId }
+          });
+          dispatch({
+            type: "server/private_message",
+            data: { message: messages[0], conversationId: userId }
+          });
+        }}
+        user={{
+          _id: selfUser.userId
+        }}
+      />
+      {Platform.OS === "android" && (<KeyboardAvoidingView behavior="padding" />)}
+    </View>
   );
 }

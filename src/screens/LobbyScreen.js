@@ -3,13 +3,12 @@ import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert
 import * as Animatable from 'react-native-animatable';
 import { useDispatch } from 'react-redux';
 
-
 import Background from '../components/Background'
 
 export default function LobbyScreen({ navigation }) {
-  const [username, setUsername] = useState("");
-  const [isActive, setActive] = useState(false);
   const dispatch = useDispatch();
+  const [isActive, setActive] = useState(false);
+  const [username, setUsername] = useState("");
 
   return (
     <Background style={styles.container}>
@@ -20,10 +19,8 @@ export default function LobbyScreen({ navigation }) {
       />
       <View style={{ flex: 1, justifyContent: "space-between" }}>
         <TextInput
-          onChangeText={text => {
-            setUsername(text)
-            setActive(true)
-          }}
+          onChangeText={text => setUsername(text)}
+          onSubmitEditing={() => setActive(true)}
           value={username}
           style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
@@ -31,8 +28,9 @@ export default function LobbyScreen({ navigation }) {
         {/* TODO: button disable and use CustomAlert:*/}
         {/* {username.length > 4 ? <></> : <CustomAlert />} */}
         {/* Alert.alert('Invalid User!', 'Please enter your name.'); */}
-        <Button title="Join Chat"
+        <Button
           // onPress={() => username ? joinChat(username)
+          title="Join Chat"
           onPress={() => {
             dispatch({ type: "server/join", data: username });
             navigation.navigate("ChatRoom");

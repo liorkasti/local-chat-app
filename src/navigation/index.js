@@ -5,9 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationActions } from 'react-navigation';
 import { useSelector } from 'react-redux';
 
-import * as authActions from '../redux/actions/auth';
 import RootStackScreen from './RootStackScreen';
-import { ChatRoom, LobbyScreen } from '../screens';
+import { ChatRoom, LobbyScreen, UsersList } from '../screens';
+import * as authActions from '../redux/actions/auth';
 import Background from '../components/Background'
 
 const Stack = createStackNavigator();
@@ -31,7 +31,8 @@ export default AppStack = () => {
       {/* {loginState.userToken === null ? ( */}
       {username ?
         <Stack.Navigator headerMode='none'>
-          <Stack.Screen name="ChatScreen" component={ChatRoom} />
+          <Stack.Screen name="UsersList" component={UsersList} initialParams={{ name: 'user', userId: 1 }} />
+          <Stack.Screen name="ChatRoom" component={ChatRoom} />
           <Stack.Screen name="LobbyScreen" component={LobbyScreen} />
         </Stack.Navigator>
         :
