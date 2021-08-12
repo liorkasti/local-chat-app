@@ -13,7 +13,7 @@ export default function ChatRoom({ navigation }) {
   const socket = useRef(null);
 
   useEffect(() => {
-    socket.current = io("http://192.168.1.18:3001");
+    const socket = io("http://192.168.116.2:3001"); // replace with the IP of your server, when testing on real devices
     socket.current.on("message", message => {
       setRecvMessages(prevState => GiftedChat.append(prevState, message));
       console.log('conversations: ', conversations)
@@ -38,10 +38,13 @@ export default function ChatRoom({ navigation }) {
     <GiftedChat
       renderUsernameOnMessage
       messages={conversations}
+      showAvatarForEveryMessage={true}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1
-      }}
+        _id: 1,
+        name: "",
+        avatar: "https://placeimg.com/140/140/any`",
+    }}
     />
   );
 }
