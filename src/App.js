@@ -7,7 +7,7 @@ import io from "socket.io-client";
 
 import AppContainer from "./navigation";
 
-const socket = io("http://192.168.116.2:3001"); // replace with the IP of your server, when testing on real devices
+const socket = io("http://192.168.1.18:3001"); // replace with the IP of your server, when testing on real devices
 const socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 function reducer(state = { conversations: {} }, action) {

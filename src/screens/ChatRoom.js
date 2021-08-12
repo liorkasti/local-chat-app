@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
-// ChatRoom.navigationOptions = props => ({
-//   title: props.navigation.getParam("name")
-// });
+ChatRoom.navigationOptions = props => ({
+  title: props.navigation.getParam("name")
+});
 
 export default function ChatRoom({ route, navigation }) {
   
   console.log("ChatRoom route: ", route)
+  console.log("ChatRoom navigation: ", navigation)
   
   const dispatch = useDispatch();
   const selfUser = useSelector(state => state.selfUser);
