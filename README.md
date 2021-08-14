@@ -71,14 +71,14 @@ _______________________________________________
 | Number | Description |
 | ------ | ------ |
 | 1 | Fix socket.id connection loop
-| 2 | Test multi devices chatroom
-| 3 | Add user subscriptions options via firebase
-| 4 | Add store collection for chats in the firrstore
-| 5 | Modify UI in LobbyScreen.js
-| 6 | Fix UI in SplashScreen.js
-| 7 | Cleanup unused code 
-<!-- | 8 | 
-| 9 |  -->
+| 2 | Fix redux logic conversation synch
+| 3 | Test multi devices chatroom
+| 4 | Add user subscriptions options via firebase
+| 5 | Add store collection for chats in the firrstore
+| 6 | Modify UI in LobbyScreen.js
+| 7 | Fix UI in SplashScreen.js 
+| 8 | Cleanup unused code
+| 9 | Prepare an apk
 
 Enjoy! thank you.
 
