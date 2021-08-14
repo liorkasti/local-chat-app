@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageBackground, StyleSheet, KeyboardAvoidingView, SafeAreaView, ScrollView } from 'react-native'
+import { ImageBackground, StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Dimensions, } from 'react-native'
 
 export default function Background({ children }) {
   return (
@@ -8,26 +8,30 @@ export default function Background({ children }) {
       resizeMode="repeat"
       style={styles.background}
     >
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <StatusBar backgroundColor='#009387' barStyle="light-content" />
+
+      <View style={styles.container}>
         <ScrollView>
           <SafeAreaView>
             {children}
           </SafeAreaView>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     </ImageBackground>
   )
 }
+
+const { height } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#000000',
+    // paddingTop: height,
   },
   container: {
     flex: 1,
-    padding: 20,
+    // padding: 20,
     width: '100%',
     maxWidth: 340,
     alignSelf: 'center',

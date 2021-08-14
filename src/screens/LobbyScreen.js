@@ -1,12 +1,31 @@
-import React, { useState } from "react";
-import { StyleSheet, View, TextInput, Image, Button, Platform, KeyboardAvoidingView, Alert, Text } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert, Text } from "react-native";
 import * as Animatable from 'react-native-animatable';
+import { useDispatch } from 'react-redux';
+import io from "socket.io-client";
 
 import Background from '../components/Background'
 
-export default function LobbyScreen({ joinChat }) {
-  const [username, setUsername] = useState("");
+export default function LobbyScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [isActive, setActive] = useState(false);
+  const [username, setUsername] = useState("");
+  const [hasJoined, setHasJoined] = useState(false);
+  const socket = useRef(null);
+
+  useEffect(() => {
+    socket.current = io("http://192.168.1.18:3001");
+    socket.current.on("message", message => {
+      setRecvMessages(prevState => GiftedChat.append(prevState, message));
+    });
+  }, [hasJoined]);
+
+  const joinChat = username => {
+    socket.current.emit("join", username);
+    setHasJoined(true);
+    dispatch({ type: "server/join", data: { username: username, userId: 2 } });
+    navigation.navigate("ChatRoom", { data: username });
+  };
 
   return (
     <Background style={styles.container}>
@@ -29,10 +48,7 @@ export default function LobbyScreen({ joinChat }) {
         <Button
           // onPress={() => username ? joinChat(username)
           title="Join Chat"
-          onPress={() => {
-            dispatch({ type: "server/join", data: username });
-            navigation.navigate("ChatRoom");
-          }}
+          onPress={() => { joinChat(username); }}
         />
       </View>
       <KeyboardAvoidingView behavior="padding" />
@@ -48,6 +64,10 @@ const CustomAlert = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 200
+  },
   errorText: {
     fontFamily: 'open-sans',
     color: 'red',
