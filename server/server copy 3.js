@@ -3,16 +3,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 const port = process.env.PORT || 3001;
 
-server.listen(port, () => {
-  console.log('Server listening at port %d', port);
-});
-
-// Routing
-app.use(express.static(path.join(__dirname, 'public')));
-
+// socket.io
+const io = require("socket.io")();
 const uuidv1 = require("uuid/v1");
 // chatroom
 const messageHandler = require("./handlers/message.handler");
@@ -64,8 +58,8 @@ io.on("connection", socket => {
         console.log("Got a private-message", action.data);
     }
   });
-  // console.log("users[socket.id]: ", users[socket.id]);
+  console.log("users[socket.id]: ", users[socket.id]);
 });
 
-// io.listen(port, () => {
-//   console.log('Server listening at port %d', port)});
+io.listen(port, () => {
+  console.log('Server listening at port %d', port)});

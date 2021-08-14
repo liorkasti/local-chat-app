@@ -7,7 +7,8 @@
     "ios": "npx react-native run-ios",
     "start": "npx react-native start",
     "dev": "npx react-native start -- --reset-cache",
-    "server": "cd server/ && yarn start",
+    "nodemon": "cd server/ && nodemon server.js",
+    "server": "cd server/ && yarn && nodemon server.js",
     "test": "jest",
     "lint": "eslint ."
   },
