@@ -52,7 +52,6 @@ Simple NodeJS server on socket.io + Redux + Redux-socket.io and react-native mob
 
 This app requires [Node.js](https://nodejs.org/), [express.js](https://expressjs.com/en/guide/routing.html), [Redux](https://redux.js.org/), [socket.io](https://socket.io) install it before you run the application
 
-```
 
 ## Official Docs
 This Application is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
@@ -64,6 +63,7 @@ This Application is currently extended with the following plugins. Instructions 
 * [Socket.io](https://socket.io)
 * [React Navigation](https://reactnavigation.org/)
 * [GiftedChat ](https://github.com/FaridSafi/react-native-gifted-chat)
+
 _______________________________________________
 
 ## TODOs:
