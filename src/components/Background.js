@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageBackground, StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Dimensions, } from 'react-native'
+import { ImageBackground, StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
 
 export default function Background({ children }) {
   return (
@@ -17,6 +17,7 @@ export default function Background({ children }) {
           </SafeAreaView>
         </ScrollView>
       </View>
+      <KeyboardAvoidingView behavior="padding" />
     </ImageBackground>
   )
 }

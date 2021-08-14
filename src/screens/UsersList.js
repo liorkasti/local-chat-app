@@ -12,7 +12,6 @@ export default function UsersList({ navigation }) {
     <View style={{ flex: 1 }}>
       <FlatList
         data={usersOnline}
-        keyExtractor={item => item.userId}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity
@@ -34,6 +33,7 @@ export default function UsersList({ navigation }) {
             </TouchableOpacity>
           );
         }}
+        keyExtractor={item => item.userId}
       />
     </View>
   );

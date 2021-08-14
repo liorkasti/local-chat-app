@@ -28,14 +28,21 @@ export default function LobbyScreen({ navigation }) {
         {/* TODO: button disable and use CustomAlert:*/}
         {/* {username.length > 4 ? <></> : <CustomAlert />} */}
         {/* Alert.alert('Invalid User!', 'Please enter your name.'); */}
-        <Button
+        <Button title="Join Chat" onPress={() => {
+          dispatch({ type: "server/join", data: username });
+          navigation.navigate("ChatRoom", { username: username })
+        }
+        } />
+        <KeyboardAvoidingView behavior="padding" />
+
+        {/* <Button
           // onPress={() => username ? joinChat(username)
           title="Join Chat"
           onPress={() => {
             dispatch({ type: "server/join", data: username });
             navigation.navigate("ChatRoom");
           }}
-        />
+        /> */}
       </View>
       <KeyboardAvoidingView behavior="padding" />
     </Background>

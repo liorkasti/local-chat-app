@@ -6,41 +6,48 @@ import { useDispatch, useSelector } from "react-redux";
 import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
-ChatRoom.navigationOptions = props => ({
-  title: props.navigation.getParam("name")
-});
+// ChatRoom.navigationOptions = props => ({
+//   title: props.navigation.getParam("name")
+// });
 
 export default function ChatRoom({ route, navigation }) {
-  
-  console.log("ChatRoom route: ", route)
-  console.log("ChatRoom navigation: ", navigation)
-  
-  const dispatch = useDispatch();
-  const selfUser = useSelector(state => state.selfUser);
-  const conversations = useSelector(state => state.conversations);
-  const userId = route.params.userId;
-  const messages = conversations[userId].messages;
+
+  console.log("route : ", route.params.username)
+  console.log("navigation : ", navigation)
+  const [recvMessages, setRecvMessages] = useState([]);
+  const [hasJoined, setHasJoined] = useState(false);
+  const socket = useRef(null);
+
+  useEffect(() => {
+    socket.current = io("http://192.168.1.18:3001");
+    socket.current.on("message", message => {
+      setRecvMessages(prevState => GiftedChat.append(prevState, message));
+    });
+  }, []);
+
+  const joinChat = username => {
+    socket.current.emit("join", username);
+    setHasJoined(true);
+  };
+
+
+  const onSend = messages => {
+    socket.current.emit("message", messages[0].text);
+    setRecvMessages(prevState => GiftedChat.append(prevState, messages));
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <GiftedChat
         renderUsernameOnMessage
-        messages={messages}
-        onSend={messages => {
-          dispatch({
-            type: "private_message",
-            data: { message: messages[0], conversationId: userId }
-          });
-          dispatch({
-            type: "server/private_message",
-            data: { message: messages[0], conversationId: userId }
-          });
-        }}
+        messages={recvMessages}
+        onSend={messages => onSend(messages)}
+        showAvatarForEveryMessage={true}
         user={{
-          _id: selfUser.userId
+          _id: route.params.username
         }}
       />
-      {Platform.OS === "android" && (<KeyboardAvoidingView behavior="padding" />)}
+      <KeyboardAvoidingView behavior="padding" />
     </View>
   );
 }
