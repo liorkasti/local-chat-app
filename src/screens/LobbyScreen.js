@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert, Text } from "react-native";
+import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert, Text, TouchableOpacity } from "react-native";
+import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch } from 'react-redux';
 import io from "socket.io-client";
 
@@ -8,10 +10,14 @@ import Background from '../components/Background'
 
 export default function LobbyScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [isActive, setActive] = useState(false);
+  const [active, setActive] = useState(false);
   const [username, setUsername] = useState("");
   const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
+
+  useEffect(() => {
+    username.length > 4 && setActive(true);
+  }, [username]);
 
   useEffect(() => {
     socket.current = io("http://192.168.1.18:3001");
@@ -38,16 +44,32 @@ export default function LobbyScreen({ navigation }) {
       <View style={{ flex: 1, justifyContent: "space-between" }}>
         <TextInput
           onChangeText={text => setUsername(text)}
-          onSubmitEditing={() => setActive(true)}
+          // onSubmitEditing={() => { username.length > 4 ? setActive(true) : setActive(false) }}
           value={username}
           style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
         />
-        <Button
-          title="Join Chat"
-          onPress={() => { username.length >=4 ? joinChat(username) : Alert.alert('Invalid User!', 'Please enter your name.'); }}
-        />
-        {username.length <4 && <CustomAlert />}
+        <View style={styles.button}>
+          <TouchableOpacity disabled={active}
+            onPress={() => {
+              active ? joinChat(username)
+                : Alert.alert('Invalid User!', 'Please enter your name.')
+            }}
+          >
+            <LinearGradient
+              colors={active ? ['#08d4c4', '#01ab9d'] : ['#ccc', '#bbb']}
+              style={styles.signIn}
+            >
+              <Text style={styles.textSign}>Join Chat</Text>
+              <MaterialIcons
+                name="navigate-next"
+                color="#fff"
+                size={20}
+              />
+            </LinearGradient>
+          </TouchableOpacity>
+          <CustomAlert />
+        </View>
       </View>
       <KeyboardAvoidingView behavior="padding" />
     </Background>
@@ -71,5 +93,21 @@ const styles = StyleSheet.create({
     color: 'red',
     margin: 10,
     fontSize: 13
+  },
+  button: {
+    alignItems: 'center',
+    marginTop: 30
+  },
+  signIn: {
+    width: 150,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    flexDirection: 'row'
+  },
+  textSign: {
+    color: 'white',
+    fontWeight: 'bold'
   }
 });
