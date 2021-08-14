@@ -2,33 +2,41 @@ import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Image, Button, Platform, KeyboardAvoidingView, Alert, Text } from "react-native";
 import * as Animatable from 'react-native-animatable';
 
+import Background from '../components/Background'
+
 export default function LobbyScreen({ joinChat }) {
   const [username, setUsername] = useState("");
   const [isActive, setActive] = useState(false);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <Background style={styles.container}>
       <Image
         resizeMode="contain"
-        style={{ flex: 1 }}
+        style={{ flex: 1, marginTop: 100 }}
         source={require("../assets/tictuk-logo.png")}
       />
-      <View style={{ flex: 1, justifyContent: "space-around" }}>
+      <View style={{ flex: 1, justifyContent: "space-between" }}>
         <TextInput
-          onChangeText={text => {
-            setUsername(text)
-            setActive(true)
-          }}
+          onChangeText={text => setUsername(text)}
+          onSubmitEditing={() => setActive(true)}
           value={username}
-          style={{ fontSize: 30, textAlign: "center" }}
+          style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
         />
         {/* TODO: button disable and use CustomAlert:*/}
         {/* {username.length > 4 ? <></> : <CustomAlert />} */}
-        <Button title="Join Chat" onPress={() => username ? joinChat(username) : Alert.alert('Invalid User!', 'Please enter your name.')} />
+        {/* Alert.alert('Invalid User!', 'Please enter your name.'); */}
+        <Button
+          // onPress={() => username ? joinChat(username)
+          title="Join Chat"
+          onPress={() => {
+            dispatch({ type: "server/join", data: username });
+            navigation.navigate("ChatRoom");
+          }}
+        />
       </View>
-      {Platform.OS === "ios" && <KeyboardAvoidingView behavior="padding" />}
-    </View>
+      <KeyboardAvoidingView behavior="padding" />
+    </Background>
   );
 }
 const CustomAlert = () => {
