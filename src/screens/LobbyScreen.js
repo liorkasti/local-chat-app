@@ -44,7 +44,7 @@ export default function LobbyScreen({ navigation }) {
           }}
         /> */}
       </View>
-      <KeyboardAvoidingView behavior="padding" />
+      {/* <KeyboardAvoidingView behavior="padding" /> */}
     </Background>
   );
 }

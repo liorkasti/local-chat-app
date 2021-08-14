@@ -12,8 +12,12 @@ import Background from '../components/Background'
 
 export default function ChatRoom({ route, navigation }) {
 
-  console.log("route : ", route.params.username)
-  console.log("navigation : ", navigation)
+  const usersOnline = useSelector(state => state.usersOnline);
+  console.log("usersOnline", usersOnline);
+
+  const dispatch = useDispatch();
+  // console.log("route : ", route.params.username)
+  // console.log("navigation : ", navigation)
   const [recvMessages, setRecvMessages] = useState([]);
   const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
@@ -22,6 +26,10 @@ export default function ChatRoom({ route, navigation }) {
     socket.current = io("http://192.168.1.18:3001");
     socket.current.on("message", message => {
       setRecvMessages(prevState => GiftedChat.append(prevState, message));
+      dispatch({
+        type: "server/private-message",
+        data: { text: messages[0].text, to: navigation.getParam("userId") }
+      })
     });
   }, []);
 
@@ -44,10 +52,12 @@ export default function ChatRoom({ route, navigation }) {
         onSend={messages => onSend(messages)}
         showAvatarForEveryMessage={true}
         user={{
-          _id: route.params.username
+          _id: route.params.username,
+          name: route.params.username,
+          avatar: "https://placeimg.com/140/140/any`",
         }}
       />
-      <KeyboardAvoidingView behavior="padding" />
+      {/* {Platform.OS === "android" && (<KeyboardAvoidingView behavior="padding" />)} */}
     </View>
   );
 }

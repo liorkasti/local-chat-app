@@ -17,7 +17,7 @@ export default function Background({ children }) {
           </SafeAreaView>
         </ScrollView>
       </View>
-      <KeyboardAvoidingView behavior="padding" />
+      {/* <KeyboardAvoidingView behavior="padding" /> */}
     </ImageBackground>
   )
 }
