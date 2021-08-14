@@ -8,7 +8,7 @@ import Background from '../components/Background'
 
 export default function ChatRoom({ route, navigation }) {
   // console.log("route : ", route.params.username)
-  // console.log("navigation : ", navigation)
+  console.log("navigation : ", navigation)
   const dispatch = useDispatch();
   const [recvMessages, setRecvMessages] = useState([]);
   const [hasJoined, setHasJoined] = useState(false);
