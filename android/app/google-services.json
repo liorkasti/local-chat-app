@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "84310393878",
+    "project_id": "gifted-cha",
+    "storage_bucket": "gifted-cha.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84310393878:android:fa1a3776a767af4f91a137",
+        "android_client_info": {
+          "package_name": "com.tictukchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84310393878-jv7uffn55kli7bpi0402n2eumc50vpsi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tictukchat",
+            "certificate_hash": "6dcea18d4aea74631ddeef77060f7823b0b158ae"
+          }
+        },
+        {
+          "client_id": "84310393878-hidgcn0b9cu5ffahv93d6lqei5up0emh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMup1RRqM_oL60SNs4Ac7k5D7azkjKbqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84310393878-hidgcn0b9cu5ffahv93d6lqei5up0emh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

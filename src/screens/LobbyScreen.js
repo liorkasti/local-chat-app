@@ -2,11 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert, Text, TouchableOpacity } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
+import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch } from 'react-redux';
 import io from "socket.io-client";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import auth from '@react-native-firebase/auth';
 
+// import { db, auth } from "../server/firebase";
+import Login from "../components/Login";
 import Background from '../components/Background'
+const currentUser = auth().currentUser;
 
 export default function LobbyScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -16,7 +22,7 @@ export default function LobbyScreen({ navigation }) {
   const socket = useRef(null);
 
   useEffect(() => {
-    username.length > 4 && setActive(true);
+    username.length > 3 && setActive(true);
   }, [username]);
 
   useEffect(() => {
@@ -42,17 +48,27 @@ export default function LobbyScreen({ navigation }) {
         source={require("../assets/tictuk-logo.png")}
       />
       <View style={{ flex: 1, justifyContent: "space-between" }}>
-        <TextInput
+        <Input
           onChangeText={text => setUsername(text)}
-          // onSubmitEditing={() => { username.length > 4 ? setActive(true) : setActive(false) }}
+          onSubmitEditing={() => { username.length > 3 ? setActive(true) : setActive(false) }}
+          rightIcon={{ type: 'font-awesome', name: 'chevron-right', size: 20, color: '#888' }}
           value={username}
-          style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
+          inputContainerStyle={{ borderBottomWidth: 0 }}
+          style={{ borderColor: "#888", borderBottomWidth: 1, fontSize: 22, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
+          leftIcon={
+            <Icon
+              name='user'
+              size={20}
+              color='#888'
+            />}
         />
         <View style={styles.button}>
-          <TouchableOpacity disabled={active}
-            onPress={() => {
-              active ? joinChat(username)
+          <TouchableOpacity
+            // disabled={active}
+            onPress={(username) => {
+              active ?
+                joinChat(username)
                 : Alert.alert('Invalid User!', 'Please enter your name.')
             }}
           >
@@ -68,8 +84,9 @@ export default function LobbyScreen({ navigation }) {
               />
             </LinearGradient>
           </TouchableOpacity>
-          <CustomAlert />
+          {username.length > 3 ? null : <CustomAlert />}
         </View>
+        <Login />
       </View>
       <KeyboardAvoidingView behavior="padding" />
     </Background>

@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
+ChatRoom.navigationOptions = screenProps => ({
+  title: screenProps.navigation.getParam("name")
+});
+
 export default function ChatRoom({ route, navigation }) {
   const dispatch = useDispatch();
   const [recvMessages, setRecvMessages] = useState([]);
