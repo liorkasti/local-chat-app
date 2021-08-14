@@ -45,8 +45,9 @@ export default function LobbyScreen({ navigation }) {
         />
         <Button
           title="Join Chat"
-          onPress={() => { (username) ? joinChat(username) : Alert.alert('Invalid User!', 'Please enter your name.'); }}
+          onPress={() => { username.length >=4 ? joinChat(username) : Alert.alert('Invalid User!', 'Please enter your name.'); }}
         />
+        {username.length <4 && <CustomAlert />}
       </View>
       <KeyboardAvoidingView behavior="padding" />
     </Background>
@@ -55,7 +56,7 @@ export default function LobbyScreen({ navigation }) {
 const CustomAlert = () => {
   return (
     <Animatable.View animation="fadeInLeft" duration={500}>
-      <Text style={styles.errorMsg} title={'Invalid User!'}>Username must be 4 characters long.</Text>
+      <Text style={styles.errorText} title={'Invalid User!'}>Username must be 4 characters long.</Text>
     </Animatable.View>
   );
 };
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: 'open-sans',
     color: 'red',
-    marginTop: 10,
+    margin: 10,
     fontSize: 13
   }
 });
