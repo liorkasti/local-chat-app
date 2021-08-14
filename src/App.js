@@ -24,7 +24,7 @@ function reducer(state = {}, action) {
 const store = applyMiddleware(socketIoMiddleware)(createStore)(reducer);
 
 store.subscribe(() => {
-  console.log("new user: ", store.getState());
+  // console.log("new user: ", store.getState());
 });
 store.dispatch({ type: "server/hello", data: "Hello!" });
 

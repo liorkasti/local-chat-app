@@ -43,13 +43,9 @@ export default function LobbyScreen({ navigation }) {
           style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
         />
-        {/* TODO: button disable and use CustomAlert:*/}
-        {/* {username.length > 4 ? <></> : <CustomAlert />} */}
-        {/* Alert.alert('Invalid User!', 'Please enter your name.'); */}
         <Button
-          // onPress={() => username ? joinChat(username)
           title="Join Chat"
-          onPress={() => { joinChat(username); }}
+          onPress={() => { (username) ? joinChat(username) : Alert.alert('Invalid User!', 'Please enter your name.'); }}
         />
       </View>
       <KeyboardAvoidingView behavior="padding" />
@@ -72,6 +68,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: 'open-sans',
     color: 'red',
+    marginTop: 10,
     fontSize: 13
   }
 });

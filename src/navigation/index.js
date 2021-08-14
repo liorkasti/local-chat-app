@@ -12,7 +12,10 @@ import Background from '../components/Background'
 const Stack = createStackNavigator();
 
 export default AppStack = () => {
-
+  
+  const usersOnline = useSelector(state => state.usersOnline);
+  console.log("usersOnline", usersOnline);
+  
   const [loginState, dispatch] = useState(false);
   const username = "";
   // console.log(username);

@@ -7,21 +7,9 @@ import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
 export default function ChatRoom({ route, navigation }) {
-  // console.log("route : ", route.params.username)
-  console.log("navigation : ", navigation)
   const dispatch = useDispatch();
   const [recvMessages, setRecvMessages] = useState([]);
-  const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
-
-  // useEffect(() => {
-  //   if(route.params.username){
-  //     socket.current = io("http://192.168.1.18:3001");
-  //     socket.current.on("message", message => {
-  //       setRecvMessages(prevState => GiftedChat.append(prevState, message));
-  //     });
-  //   }
-  // }, []);
 
   const onSend = messages => {
     socket.current = io("http://192.168.1.18:3001");
@@ -30,7 +18,6 @@ export default function ChatRoom({ route, navigation }) {
     });
     socket.current.emit("message", messages[0].text);
     setRecvMessages(prevState => GiftedChat.append(prevState, messages));
-    // dispatch({ type: "server/hello", data: { message: messages[0], conversationId: userId } });
   };
 
   return (
