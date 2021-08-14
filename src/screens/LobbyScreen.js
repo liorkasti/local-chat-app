@@ -23,6 +23,7 @@ export default function LobbyScreen({ navigation }) {
   const joinChat = username => {
     socket.current.emit("join", username);
     setHasJoined(true);
+    dispatch({ type: "connection", data: { username: username } });
     dispatch({ type: "server/join", data: { username: username, userId: 2 } });
     navigation.navigate("ChatRoom", { data: username });
   };

@@ -33,8 +33,8 @@ function createUserAvatarUrl() {
 }
 
 io.on("connection", socket => {
-  console.log("a user connected!");
-  console.log(socket.id);
+  // console.log("a user connected!");
+  // console.log(socket.id);
   users[socket.id] = { userId: uuidv1() };
   socket.on("join", username => {
     users[socket.id].username = username;
