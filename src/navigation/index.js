@@ -1,4 +1,5 @@
-import React, { useState, useEffect, YellowBox, useReducer, useMemo } from 'react';
+import React, { useState, useEffect, useReducer, useMemo } from 'react';
+import { YellowBox, LogBox } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
@@ -8,10 +9,6 @@ import RootStackScreen from './RootStackScreen';
 import { ChatRoom, LobbyScreen, SplashScreen } from '../screens';
 import Background from '../components/Background'
 import Orientation from 'react-native-orientation-locker';
-
-// YellowBox.ignoreWarnings([
-//   'Non-serializable values were found in the navigation state',
-// ]);
 
 const Stack = createStackNavigator();
 const currentUser = auth().currentUser;
@@ -37,7 +34,12 @@ export default AppStack = () => {
     return onOpenIndex();
   }, []);
 
-  const onOpenIndex = () => { console.disableYellowBox = true; }
+  const onOpenIndex = () => {
+    // console.disableYellowBox = true;
+    // YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state',
+    //   'Warning: Async Storage has been extracted from react-native core']);
+    LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+  }
 
   const username = "";
   if (username) {

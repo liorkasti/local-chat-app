@@ -75,7 +75,7 @@ _______________________________________________
 | 2 | Fix redux logic conversation synch
 | 3 | Test multi devices chatroom
 | 4 | Add user subscriptions options via firebase
-| 5 | Add store collection for chats in the firrstore
+| 5 | 
 | 6 | 
 | 7 | 
 | 8 | Cleanup unused code

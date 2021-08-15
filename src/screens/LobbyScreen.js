@@ -1,3 +1,4 @@
+// @refresh reset
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { StyleSheet, View, TextInput, Image, KeyboardAvoidingView, Alert, Text, TouchableOpacity } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,7 +9,8 @@ import { useDispatch } from 'react-redux';
 import io from "socket.io-client";
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import { GiftedChat } from "react-native-gifted-chat";
 
 import Login from "../components/Login";
@@ -24,7 +26,8 @@ export default function LobbyScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const [avatarURL, setAvatarURL] = useState('');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function LobbyScreen({ navigation }) {
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       appendMessages(messagesFirestore)
     })
+    return () => unsubscribe()
   }, []);
 
 
@@ -49,6 +53,7 @@ export default function LobbyScreen({ navigation }) {
   const getData = async () => {
     try {
       const user = await AsyncStorage.getItem('user')
+      console.log('getData user: ', user)
       if (user) {
         setUser(JSON.parse(user))
       }
@@ -62,12 +67,16 @@ export default function LobbyScreen({ navigation }) {
 
   async function storeData() {
     try {
-      const rand1 = Math.round(Math.random() * 200 + 100);
-      const rand2 = Math.round(Math.random() * 200 + 100);
+      const avatar = `https://placeimg.com/${rand1}/${rand2}/any`
+      setAvatarURL(avatarURL)
       const _id = Math.random().toString(36).substring(7)
-      const user = { _id, username, avatar: `https://placeimg.com/${rand1}/${rand2}/any` }
+      const user = {
+        _id,
+        username,
+        // avatarURL
+      }
       await AsyncStorage.setItem('user', JSON.stringify(user))
-        .then(() => { console.log('user: ', user) })
+        .then(() => { console.log('AsyncStorage user: ', user) })
       setUser(user)
     } catch (e) {
       console.error('Error: ', e)
@@ -77,6 +86,8 @@ export default function LobbyScreen({ navigation }) {
   const handleSend = async (messages) => {
     const messagesStack = messages.map(m => chatRef.add(m))
     await Promise.all(messagesStack)
+    console.log('appendMessages: ', messagesStack)
+    console.log('handleSend user: ', user)
   }
 
   useEffect(() => {
@@ -158,10 +169,9 @@ export default function LobbyScreen({ navigation }) {
       messages={messages}
       onSend={handleSend}
       showAvatarForEveryMessage={true}
-      // user={user}
       user={{
         user,
-        avatar: "https://placeimg.com/140/140/any`",
+        avatar: `https://placeimg.com/${rand1}/${rand2}/any`,
       }}
     />
     // {Platform.OS === "android" && (<KeyboardAvoidingView behavior="padding" />)}
@@ -174,6 +184,9 @@ const CustomAlert = () => {
     </Animatable.View>
   );
 };
+  
+const rand1 = Math.round(Math.random() * 200 + 100);
+const rand2 = Math.round(Math.random() * 200 + 100);
 
 const styles = StyleSheet.create({
   container: {

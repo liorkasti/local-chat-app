@@ -32,8 +32,8 @@ export default function ChatRoom({ route, navigation }) {
         onSend={messages => onSend(messages)}
         showAvatarForEveryMessage={true}
         user={{
-          _id: route.params.uata._id,
-          name: route.params.uata.username,
+          _id: route.params.data._id,
+          name: route.params.data.username,
           avatar: "https://placeimg.com/140/140/any`",
         }}
       />

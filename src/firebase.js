@@ -1,3 +1,4 @@
+// @refresh reset
 import 'firebase/auth';
 import 'firebase/firestore';
 import firebase from "firebase/app";
@@ -8,7 +9,7 @@ const firebaseConfig = {
     storageBucket: "gifted-cha.appspot.com",
     messagingSenderId: "84310393878",
     appId: "1:84310393878:web:50bc6b278959051291a137"
-};
+  };
 
 let app;
 if (firebase.apps.length === 0) {
