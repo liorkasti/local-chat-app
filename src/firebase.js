@@ -1,6 +1,6 @@
-import * as firebase from 'firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
+import firebase from "firebase/app";
 const firebaseConfig = {
     apiKey: "AIzaSyCBKBef2L7MJ0JReOcdziDpR7hx-DrJJP4",
     authDomain: "gifted-cha.firebaseapp.com",
@@ -11,10 +11,10 @@ const firebaseConfig = {
 };
 
 let app;
-if (firebase.appId.length === 0) {
+if (firebase.apps.length === 0) {
     // Initialize Firebase
     app = firebase.initializeApp(firebaseConfig);
-} else{
+} else {
     app.firebase.app()
 }
 

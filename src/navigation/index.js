@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useReducer, useMemo } from 'react';
+import React, { useState, useEffect, YellowBox, useReducer, useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
 import RootStackScreen from './RootStackScreen';
-import { ChatRoom, LobbyScreen } from '../screens';
+import { ChatRoom, LobbyScreen, SplashScreen } from '../screens';
 import Background from '../components/Background'
-import { YellowBox } from 'react-native';
+import Orientation from 'react-native-orientation-locker';
 
-YellowBox.ignoreWarnings([
-  'Non-serializable values were found in the navigation state',
-]);
+// YellowBox.ignoreWarnings([
+//   'Non-serializable values were found in the navigation state',
+// ]);
 
 const Stack = createStackNavigator();
 const currentUser = auth().currentUser;
@@ -23,16 +23,21 @@ export default AppStack = () => {
   const [loaded, setLoaded] = useState(false);
 
   console.log("currentUser: ", currentUser);
-
-
   useEffect(() => {
     onAuthStateChanged = (user) => {
       wait(200).then(() => (
         currentUser ? setLoaded(true) : setLoaded(false)
-        ));
+      ));
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    // bootstrap()
+    setTimeout(() => { Orientation.lockToPortrait(); });
+    return onOpenIndex();
+  }, []);
+
+  const onOpenIndex = () => { console.disableYellowBox = true; }
 
   const username = "";
   if (username) {
@@ -51,6 +56,7 @@ export default AppStack = () => {
         <Stack.Navigator headerMode='none'>
           <Stack.Screen name="ChatRoom" component={ChatRoom} />
           <Stack.Screen name="LobbyScreen" component={LobbyScreen} />
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
         </Stack.Navigator>
         :
         <RootStackScreen />
@@ -62,5 +68,10 @@ export default AppStack = () => {
 function wait(timeout) {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
+  });
+}
+async function bootstrap() {
+  await database().settings({
+    persistence: false, // disable offline persistence
   });
 }

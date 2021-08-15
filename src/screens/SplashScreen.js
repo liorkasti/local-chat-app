@@ -9,7 +9,6 @@ import Background from '../components/Background'
 
 const SplashScreen = ({ navigation }) => {
     const { colors } = useTheme();
-
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='#009387' barStyle="light-content" />
@@ -29,9 +28,7 @@ const SplashScreen = ({ navigation }) => {
                 animation="fadeInUpBig"
             >
                 <Background>
-                    <Text style={[styles.title, {
-                        color: colors.text
-                    }]}>Stay Connected With Delivery Chat!</Text>
+                    <Text style={styles.title}>Stay Connected With Delivery Chat!</Text>
                     <Text style={styles.text}>Sign in with account</Text>
                     <View style={styles.button}>
                         <TouchableOpacity onPress={() => navigation.navigate('LobbyScreen')}>
@@ -84,7 +81,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#05375a',
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: 'bold'
     },
     text: {
