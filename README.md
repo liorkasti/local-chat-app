@@ -25,7 +25,7 @@ Simple NodeJS server on socket.io + Redux + Redux-socket.io and react-native mob
     const socket = io("http://192.***.*.**:3001");
     ```
 1.  **Step 4.**
-    Install the server dependencies and Run backend
+    Install the server dependencies and run backend
     ```sh
     $ npm server `or` $ yarn server
     ```
@@ -50,7 +50,7 @@ Simple NodeJS server on socket.io + Redux + Redux-socket.io and react-native mob
 
 ### Dependencies list
 
-This app requires [Node.js](https://nodejs.org/), [express.js](https://expressjs.com/en/guide/routing.html), [Redux](https://redux.js.org/), [socket.io](https://socket.io) install it before you run the application
+This app requires [Firebase](https://rnfirebase.io/), [Node.js](https://nodejs.org/), [express.js](https://expressjs.com/en/guide/routing.html), [Redux](https://redux.js.org/), [socket.io](https://socket.io) install it before you run the application
 
 
 ### Official Docs
@@ -62,7 +62,8 @@ This Application is currently extended with the following plugins. Instructions 
 * [React Native](https://facebook.github.io/react-native/)
 * [Socket.io](https://socket.io)
 * [React Navigation](https://reactnavigation.org/)
-* [GiftedChat ](https://github.com/FaridSafi/react-native-gifted-chat)
+* [GiftedChat](https://github.com/FaridSafi/react-native-gifted-chat)
+* [Firebase](https://rnfirebase.io/)
 
 _______________________________________________
 
@@ -74,9 +75,9 @@ _______________________________________________
 | 2 | Fix redux logic conversation synch
 | 3 | Test multi devices chatroom
 | 4 | Add user subscriptions options via firebase
-| 5 | Add store collection for chats in the firrstore
-| 6 | Modify UI in LobbyScreen.js
-| 7 | Fix UI in SplashScreen.js 
+| 5 | 
+| 6 | 
+| 7 | 
 | 8 | Cleanup unused code
 | 9 | Prepare an apk
 

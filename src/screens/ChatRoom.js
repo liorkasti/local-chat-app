@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
+// ChatRoom.navigationOptions = screenProps => ({
+//   title: screenProps.navigation.getParam("name")
+// });
+
 export default function ChatRoom({ route, navigation }) {
   console.log('route: ', route)
   console.log('navigation: ', navigation)
@@ -30,8 +34,8 @@ export default function ChatRoom({ route, navigation }) {
         onSend={messages => onSend(messages)}
         showAvatarForEveryMessage={true}
         user={{
-          _id: route.params.username,
-          name: route.params.username,
+          _id: route.params.data._id,
+          name: route.params.data.username,
           avatar: "https://placeimg.com/140/140/any`",
         }}
       />

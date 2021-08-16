@@ -15,7 +15,7 @@ const initialState = {
 }
 function reducer(state = {initialState}, action) {
   switch (action.type) {
-    case "MESSEGE":
+    case "messase":
       return { ...state, message: action.data };
     case "users_online":
       return { ...state, usersOnline: action.data };
@@ -27,7 +27,7 @@ function reducer(state = {initialState}, action) {
 const store = applyMiddleware(socketIoMiddleware)(createStore)(reducer);
 
 store.subscribe(() => {
-  console.log("new state: ", store.getState());
+  console.log("new user: ", store.getState());
 });
 // store.dispatch({ type: "server/hello", data: "Hello!" });
 
