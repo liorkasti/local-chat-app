@@ -1,6 +1,6 @@
 // @refresh reset
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { StyleSheet, View, TextInput, Image, KeyboardAvoidingView, Alert, Text, TouchableOpacity } from "react-native";
+import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
+import { StyleSheet, View, TextInput, Image, KeyboardAvoidingView, Alert, Text, TouchableOpacity, LogBox, YellowBox } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import { Input } from 'react-native-elements';
@@ -16,7 +16,11 @@ import { GiftedChat } from "react-native-gifted-chat";
 import Login from "../components/Login";
 import Background from '../components/Background'
 import { db, auth } from '../firebase'
+import { set } from "react-native-reanimated";
 
+YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state',
+  'Warning: Async Storage has been extracted from react-native core']);
+LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 // const currentUser = auth().currentUser;
 const chatRef = db.collection('chats');
 
@@ -31,24 +35,61 @@ function LobbyScreen({ navigation }) {
   const [avatarURL, setAvatarURL] = useState('');
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    getData()
-    const unsubscribe = chatRef.onSnapshot(querySnapshot => {
-      const messagesFirestore =
-        querySnapshot.docChanges().filter(({ type }) => type === 'added')
-          .map(({ doc }) => {
-            const message = doc.data()
-            return { ...message, createdAt: message.createdAt.toDate() }
-          })
-          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      appendMessages(messagesFirestore)
-    })
-    return () => unsubscribe()
-  }, []);
+  // useEffect(() => {
+  //   getData()
+  //   setMessages([
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 2,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     },
+  //   ])
+  //   return
+  // }, [])
 
+
+  // useEffect(() => {
+  //   getData()
+  //   const unsubscribe = chatRef.onSnapshot(querySnapshot => {
+  //     const messagesFirestore =
+  //       querySnapshot.docChanges().filter(({ type }) => type === 'added')
+  //         .map(({ doc }) => {
+  //           const message = doc.data()
+  //           return { ...message, createdAt: message.createdAt.toDate() }
+  //         })
+  //         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  //     appendMessages(messagesFirestore)
+  //   })
+  //   return () => unsubscribe()
+  // }, []);
+
+  useLayoutEffect(() => {
+    const unsubscribe =
+      chatRef.orderBy('createdAt').orderBy('createdAt', 'desc').onSnapshot(
+        snapshot =>
+          setMessages(
+            snapshot.docs.map(doc => ({
+              _id: doc.data()._id,
+              createdAt: doc.data().createdAt,
+              text: doc.data().text,
+              user: doc.data().user
+            })
+            )
+          )
+      )
+    return () => unsubscribe
+  }), []
 
   const appendMessages = useCallback((messages) => {
-    setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
+    setMessages(previousMessages => GiftedChat.
+      append(previousMessages, messages))
+    const { _id, createdAt, text, user } = messages[0]
+    chatRef.add({ _id, createdAt, text, user })
   }, [messages])
 
   const getData = async () => {
@@ -59,7 +100,7 @@ function LobbyScreen({ navigation }) {
         setUser(JSON.parse(user))
       }
       if (!user) {
-        return <View style={styles.container}></View>
+        return <View style={styles.container}> </View>
       }
     } catch (e) {
       console.error('Error: ', e)
@@ -69,13 +110,9 @@ function LobbyScreen({ navigation }) {
   async function storeData() {
     try {
       const avatar = `https://placeimg.com/${rand1}/${rand2}/any`
-      setAvatarURL(avatarURL)
+      setAvatarURL(avatar)
       const _id = Math.random().toString(36).substring(7)
-      const user = {
-        _id,
-        username,
-        // avatarURL
-      }
+      const user = { _id, username, avatar }
       await AsyncStorage.setItem('user', JSON.stringify(user))
         .then(() => { console.log('AsyncStorage user: ', user) })
       setUser(user)
@@ -175,7 +212,7 @@ const CustomAlert = () => {
     </Animatable.View>
   );
 };
-  
+
 const rand1 = Math.round(Math.random() * 200 + 100);
 const rand2 = Math.round(Math.random() * 200 + 100);
 
