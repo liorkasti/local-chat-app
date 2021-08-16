@@ -3,12 +3,13 @@ import { StyleSheet, View, TextInput, Image, Button, KeyboardAvoidingView, Alert
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import io from "socket.io-client";
 
 import Background from '../components/Background'
 
-export default function LobbyScreen({ navigation }) {
+function LobbyScreen({ navigation }) {
+
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
   const [username, setUsername] = useState("");
@@ -16,21 +17,23 @@ export default function LobbyScreen({ navigation }) {
   const socket = useRef(null);
 
   useEffect(() => {
-    username.length > 4 && setActive(true);
+    username.length > 3 && setActive(true);
   }, [username]);
 
   useEffect(() => {
-    socket.current = io("http://192.168.1.18:3001");
-    socket.current.on("message", message => {
-      setRecvMessages(prevState => GiftedChat.append(prevState, message));
-    });
+    if (hasJoined) {
+      // socket.current = io("http://192.168.1.18:3001");
+      // socket.current.on("message", message => {
+      //   setRecvMessages(prevState => GiftedChat.append(prevState, message));
+      // });
+    }
   }, [hasJoined]);
 
   const joinChat = username => {
-    socket.current.emit("join", username);
     setHasJoined(true);
+    socket.current.emit("join", username);
     dispatch({ type: "connection", data: { username: username } });
-    dispatch({ type: "server/join", data: { username: username, userId: 2 } });
+    // dispatch({ type: "server/join", data: { username: username, userId: 2 } });
     navigation.navigate("ChatRoom", { data: username });
   };
 
@@ -44,13 +47,14 @@ export default function LobbyScreen({ navigation }) {
       <View style={{ flex: 1, justifyContent: "space-between" }}>
         <TextInput
           onChangeText={text => setUsername(text)}
-          // onSubmitEditing={() => { username.length > 4 ? setActive(true) : setActive(false) }}
+          onSubmitEditing={() => { username.length > 3 ? setActive(true) : setActive(false) }}
           value={username}
           style={{ fontSize: 30, textAlign: "center", marginVertical: 20 }}
           placeholder="Enter username"
         />
         <View style={styles.button}>
-          <TouchableOpacity disabled={active}
+          <TouchableOpacity
+            // disabled={active}
             onPress={() => {
               active ? joinChat(username)
                 : Alert.alert('Invalid User!', 'Please enter your name.')
@@ -75,6 +79,11 @@ export default function LobbyScreen({ navigation }) {
     </Background>
   );
 }
+
+const mapStateToProps = state => ({ data: state.username })
+
+export default connect(mapStateToProps)(LobbyScreen);
+
 const CustomAlert = () => {
   return (
     <Animatable.View animation="fadeInLeft" duration={500}>

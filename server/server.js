@@ -11,7 +11,7 @@ server.listen(port, () => {
 });
 
 // Routing
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 const uuidv1 = require("uuid/v1");
 // chatroom
@@ -33,9 +33,10 @@ function createUserAvatarUrl() {
 }
 
 io.on("connection", socket => {
-  // console.log("a user connected!");
-  // console.log(socket.id);
-  users[socket.id] = { userId: uuidv1() };
+  console.log("a user connected!", currentUserId);
+  console.log(socket.id);
+  // users[socket.id] = { userId: uuidv1() };
+  users[socket.id] = { userId: currentUserId++ };
   socket.on("join", username => {
     users[socket.id].username = username;
     users[socket.id].avatar = createUserAvatarUrl();
@@ -60,8 +61,8 @@ io.on("connection", socket => {
           data: createUsersOnline()
         });
         break;
-      case "server/private-message":
-        console.log("Got a private-message", action.data);
+      case "MESSEGE":
+        console.log("Got a message", action.data);
     }
   });
 });

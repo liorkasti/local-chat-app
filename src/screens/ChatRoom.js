@@ -7,6 +7,8 @@ import LobbyScreen from "./LobbyScreen";
 import Background from '../components/Background'
 
 export default function ChatRoom({ route, navigation }) {
+  console.log('route: ', route)
+  console.log('navigation: ', navigation)
   const dispatch = useDispatch();
   const [recvMessages, setRecvMessages] = useState([]);
   const socket = useRef(null);
