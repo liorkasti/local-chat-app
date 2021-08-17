@@ -1,4 +1,3 @@
-// @refresh reset
 import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
 import { StyleSheet, View, TextInput, Image, KeyboardAvoidingView, Alert, Text, TouchableOpacity, LogBox, YellowBox } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,73 +15,37 @@ import { GiftedChat } from "react-native-gifted-chat";
 import Login from "../components/Login";
 import Background from '../components/Background'
 import { db, auth } from '../firebase'
-import { set } from "react-native-reanimated";
 
-YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state',
-  'Warning: Async Storage has been extracted from react-native core']);
-LogBox.ignoreLogs(['Setting a timer for a long period of time']);
-// const currentUser = auth().currentUser;
 const chatRef = db.collection('chats');
 
 function LobbyScreen({ navigation }) {
 
-  const dispatch = useDispatch();
   const [active, setActive] = useState(false);
   const [username, setUsername] = useState("");
-  const [hasJoined, setHasJoined] = useState(false);
-  const socket = useRef(null);
   const [user, setUser] = useState(null);
   const [avatarURL, setAvatarURL] = useState('');
   const [messages, setMessages] = useState([]);
 
-  // useEffect(() => {
-  //   getData()
-  //   setMessages([
-  //     {
-  //       _id: 1,
-  //       text: 'Hello developer',
-  //       createdAt: new Date(),
-  //       user: {
-  //         _id: 2,
-  //         name: 'React Native',
-  //         avatar: 'https://placeimg.com/140/140/any',
-  //       },
-  //     },
-  //   ])
-  //   return
-  // }, [])
-
-
-  // useEffect(() => {
-  //   getData()
-  //   const unsubscribe = chatRef.onSnapshot(querySnapshot => {
-  //     const messagesFirestore =
-  //       querySnapshot.docChanges().filter(({ type }) => type === 'added')
-  //         .map(({ doc }) => {
-  //           const message = doc.data()
-  //           return { ...message, createdAt: message.createdAt.toDate() }
-  //         })
-  //         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-  //     appendMessages(messagesFirestore)
-  //   })
-  //   return () => unsubscribe()
-  // }, []);
+  useEffect(() => {
+    username.length > 3 && setActive(true);
+  }, [username]);
 
   useLayoutEffect(() => {
     const unsubscribe =
-      chatRef.orderBy('createdAt').orderBy('createdAt', 'desc').onSnapshot(
+      chatRef.orderBy('createdAt', 'desc').onSnapshot(
         snapshot =>
           setMessages(
             snapshot.docs.map(doc => ({
               _id: doc.data()._id,
-              createdAt: doc.data().createdAt,
+              createdAt: doc.data().createdAt.toDate(),
               text: doc.data().text,
               user: doc.data().user
             })
             )
           )
       )
-    return () => unsubscribe
+
+    return unsubscribe
   }), []
 
   const appendMessages = useCallback((messages) => {
@@ -121,16 +84,43 @@ function LobbyScreen({ navigation }) {
     }
   }
 
-  const handleSend = async (messages) => {
-    const messagesStack = messages.map(m => chatRef.add(m))
-    await Promise.all(messagesStack)
-    console.log('appendMessages: ', messagesStack)
-    console.log('handleSend user: ', user)
-  }
+  // useEffect(() => {
+  //   getData()
+  //   setMessages([
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 2,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     },
+  //   ])
+  //   return
+  // }, [])
+  // useEffect(() => {
+  //   getData()
+  //   const unsubscribe = chatRef.onSnapshot(querySnapshot => {
+  //     const messagesFirestore =
+  //       querySnapshot.docChanges().filter(({ type }) => type === 'added')
+  //         .map(({ doc }) => {
+  //           const message = doc.data()
+  //           return { ...message, createdAt: message.createdAt.toDate() }
+  //         })
+  //         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  //     appendMessages(messagesFirestore)
+  //   })
+  //   return () => unsubscribe()
+  // }, []);
+  // const handleSend = async (messages) => {
+  //   const messagesStack = messages.map(m => chatRef.add(m))
+  //   await Promise.all(messagesStack)
+  //   console.log('appendMessages: ', messagesStack)
+  //   console.log('handleSend user: ', user)
+  // }
 
-  useEffect(() => {
-    username.length > 3 && setActive(true);
-  }, [username]);
 
   if (!user) {
     return (
@@ -190,7 +180,7 @@ function LobbyScreen({ navigation }) {
     <GiftedChat
       renderUsernameOnMessage
       messages={messages}
-      onSend={handleSend}
+      onSend={appendMessages}
       showAvatarForEveryMessage={true}
       user={{
         user,
